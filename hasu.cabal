@@ -1,0 +1,38 @@
+cabal-version:      2.4
+name:               hasu
+version:            0.1.0.0
+synopsis:           A Haskell library for osu!
+
+-- A longer description of the package.
+-- description:
+homepage:
+
+-- A URL where users can report bugs.
+-- bug-reports:
+license:            NONE
+author:             KV Le
+maintainer:         32186663+kvietcong@users.noreply.github.com
+
+-- A copyright notice.
+-- copyright:
+category:           Game
+extra-source-files:
+    CHANGELOG.md
+    README.md
+
+executable hasu
+    main-is: Main.hs
+    build-depends:
+        base ^>=4.14.1.0,
+        aeson ^>=1.5.6.0
+    hs-source-dirs:   src
+    default-language: Haskell2010
+
+library
+    exposed-modules:  MyLib
+
+    build-depends:
+        base ^>=4.14.1.0,
+        aeson ^>=1.5.6.0
+    hs-source-dirs:   src
+    default-language: Haskell2010
