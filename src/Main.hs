@@ -9,25 +9,6 @@ import Control.Applicative
 import qualified Data.ByteString.Lazy as LB
 import qualified Data.ByteString.UTF8 as BU
 
-data Post = Post { uid :: Int
-                 , id :: Int
-                 , title :: String
-                 , body :: String
-                 } deriving Show
-
-instance FromJSON Post where
-    parseJSON = withObject "Post" $ \o -> Post
-        <$> o .: "userId"
-        <*> o .: "id"
-        <*> o .: "title"
-        <*> o .: "body"
-
-postsEndpoint :: Request
-postsEndpoint = "https://jsonplaceholder.typicode.com/posts"
-
-getPosts :: Response LB.ByteString -> Maybe [Post]
-getPosts = decode . getResponseBody
-
 data RecentPlay = RecentPlay
     { beatmapID    :: Int
     , score        :: Int
@@ -43,8 +24,7 @@ data RecentPlay = RecentPlay
     , userID       :: Int
     , date         :: String
     , rank         :: String
-    , scoreID      :: Maybe String }
-    deriving Show
+    , scoreID      :: Maybe String } deriving Show
 
 instance FromJSON RecentPlay where
     parseJSON = withObject "RecentPlay" $ \o -> RecentPlay
@@ -64,6 +44,8 @@ instance FromJSON RecentPlay where
         <*> o .: "rank"
         <*> optional (o .: "score_id")
 
+newtype Authentication = Authentication Query
+
 osuDomain :: Request
 osuDomain = "https://osu.ppy.sh"
 
@@ -76,24 +58,24 @@ recentPlaysRequest options = setRequestBodyLBS "SOMEBODY ONCE TOLD ME"
                            $ setRequestQueryString options
                            osuDomain
 
+getAuthentication :: BU.ByteString -> Authentication
+getAuthentication apiKey = Authentication [("k", Just apiKey)]
+
+configureRecentPlaysRequest :: Authentication ->
+    BU.ByteString -> BU.ByteString -> BU.ByteString -> BU.ByteString -> Query
+configureRecentPlaysRequest
+    (Authentication query) u m limit type' = [ ("u", Just u)
+                                             , ("m", Just m)
+                                             , ("limit", Just limit)
+                                             , ("type", Just type') ] ++ query
+
 main :: IO ()
 main = do
-    postsResponse <- httpLBS postsEndpoint
-    let posts = fromMaybe [] (getPosts postsResponse)
-    print $ take 2 posts
-
     putStrLn "Please input your osu! API key"
-    osuAPIKey <- BU.fromString <$> getLine
+    auth <- getAuthentication . BU.fromString <$> getLine
 
-    putStrLn $ "Your API Key: " ++ show osuAPIKey
-
-    let options = [ ("k", Just osuAPIKey)
-                  , ("u", Just "7358268")
-                  , ("m", Just "0")
-                  , ("type", Just "id")
-                  , ("event_days", Just "31")]
-
-    recentPlaysResponse <- httpLBS $ recentPlaysRequest options
+    recentPlaysResponse <- httpLBS
+                         $ recentPlaysRequest
+                         $ configureRecentPlaysRequest auth "7358268" "0" "50" "id"
     
-    print $ fromMaybe [] (getRecentPlays recentPlaysResponse)
-    pure ()
+    mapM_ print (fromMaybe [] (getRecentPlays recentPlaysResponse))
