@@ -19,27 +19,27 @@ import qualified Data.ByteString.Lazy as LB
 import qualified Data.ByteString.UTF8 as BU
 
 data Score = Score
-    { scoreUserID           :: Maybe Int
-    , scoreUsername         :: Maybe String
-    , scoreBeatmapID        :: Maybe Int
-    , scoreScoreID          :: Maybe String
-    , scoreScore            :: Int
-    , scoreMaxCombo         :: Int
-    , scoreCount50          :: Int
-    , scoreCount100         :: Int
-    , scoreCount300         :: Int
-    , scoreCountMiss        :: Int
-    , scoreCountKatu        :: Int
-    , scoreCountGeki        :: Int
-    , scorePerfect          :: Int
-    , scoreEnabledMods      :: Maybe Int
-    , scoreDate             :: String
-    , scoreRank             :: String
-    , scorePp               :: Maybe Double
-    , scoreReplayAvailable  :: Maybe Bool
-    , scoreSlot             :: Maybe Int
-    , scoreTeam             :: Maybe Int
-    , scorePass             :: Maybe Bool
+    { userID           :: Maybe Int
+    , username         :: Maybe String
+    , beatmapID        :: Maybe Int
+    , scoreID          :: Maybe String
+    , score            :: Int
+    , maxCombo         :: Int
+    , count50          :: Int
+    , count100         :: Int
+    , count300         :: Int
+    , countMiss        :: Int
+    , countKatu        :: Int
+    , countGeki        :: Int
+    , perfect          :: Int
+    , enabledMods      :: Maybe Int
+    , date             :: String
+    , rank             :: String
+    , pp               :: Maybe Double
+    , replayAvailable  :: Maybe Bool
+    , slot             :: Maybe Int
+    , team             :: Maybe Int
+    , pass             :: Maybe Bool
     } deriving Show
 
 instance FromJSON Score where
