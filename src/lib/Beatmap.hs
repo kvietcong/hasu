@@ -4,6 +4,7 @@ module Beatmap
     , getBeatmaps
     , getBeatmap
     , getBeatmapsRequest
+    , configureBeatmapRequest
     , configureBeatmapsRequest
     )
 where
@@ -19,7 +20,7 @@ import qualified Data.ByteString.UTF8 as BU
 data Beatmap = Beatmap
     { approved          :: Int
     , submitDate        :: String
-    , approvedDate      :: String
+    , approvedDate      :: Maybe String
     , lastUpdate        :: String
     , artist            :: String
     , beatmapID         :: Int
@@ -38,6 +39,7 @@ data Beatmap = Beatmap
     , source            :: String
     , genreID           :: Int
     , languageID        :: Int
+    , packs             :: Maybe String
     , title             :: String
     , totalLength       :: Int
     , version           :: String
@@ -62,7 +64,7 @@ instance FromJSON Beatmap where
     parseJSON = withObject "Beatmap" $ \o -> Beatmap
         <$> (read <$> o .: "approved")
         <*> (o .: "submit_date")
-        <*> (o .: "approved_date")
+        <*> optional (o .: "approved_date")
         <*> (o .: "last_update")
         <*> (o .: "artist")
         <*> (read <$> o .: "beatmap_id")
@@ -81,6 +83,7 @@ instance FromJSON Beatmap where
         <*> (o .: "source")
         <*> (read <$> o .: "genre_id")
         <*> (read <$> o .: "language_id")
+        <*> (o .: "packs")
         <*> (o .: "title")
         <*> (read <$> o .: "total_length")
         <*> (o .: "version")
@@ -90,7 +93,7 @@ instance FromJSON Beatmap where
         <*> (read <$> o .: "favourite_count")
         <*> (read <$> o .: "rating")
         <*> (read <$> o .: "playcount")
-        <*> (read <$> o .: "pascount")
+        <*> (read <$> o .: "passcount")
         <*> (read <$> o .: "count_normal")
         <*> (read <$> o .: "count_slider")
         <*> (read <$> o .: "count_spinner")
@@ -113,6 +116,7 @@ getBeatmapsRequest options = setRequestBodyLBS "SOMEBODY ONCE TOLD ME"
                       $ setRequestQueryString options
                       osuDomain
 
+-- TODO: Fix how this is done
 configureBeatmapsRequest :: Authentication ->
     BU.ByteString -> BU.ByteString -> BU.ByteString -> BU.ByteString ->
     BU.ByteString -> BU.ByteString -> BU.ByteString -> BU.ByteString ->
@@ -128,3 +132,7 @@ configureBeatmapsRequest (Authentication query) since s b u type' m a h limit mo
     , ("h", Just h)
     , ("limit", Just limit)
     , ("mods", Just mods) ] ++ query
+
+configureBeatmapRequest :: Authentication -> BU.ByteString -> Query
+configureBeatmapRequest (Authentication query) b = ("b", Just b) : query
+

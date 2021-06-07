@@ -4,29 +4,24 @@ import Beatmap
 import HasuBase
 
 import Data.Maybe (fromMaybe)
-import Network.HTTP.Simple (httpLBS, getResponseBody)
+import Network.HTTP.Simple (httpLBS)
 import qualified Data.ByteString.UTF8 as BU (fromString)
 
 main :: IO ()
 main = do
     putStrLn "Please input your osu! API key"
     auth <- getAuthentication . BU.fromString <$> getLine
+    putStrLn ""
 
     recentPlaysResponse <- httpLBS
                          $ recentPlaysRequest
                          $ configureRecentPlaysRequest auth "7358268" "0" "5" "id"
-    
-    putStrLn "Recent"
+    putStrLn "Recent Plays"
     mapM_ print (fromMaybe [] (getScores recentPlaysResponse))
+    putStrLn ""
 
-    getBeatmapsResponse <- httpLBS
+    getBeatmapResponse <- httpLBS
                          $ getBeatmapsRequest
-                         $ ("b", Just "2932984") : getAuthenticationQuery auth
-
-    getBeatmapsResponse2 <- httpLBS
-                          $ getBeatmapsRequest
-                          $ configureBeatmapsRequest auth "" "2932984" "" "" "" "" "" "" "" ""
-    
-    putStrLn "Beatmaps"
-    print $ getResponseBody getBeatmapsResponse
-    mapM_ print (fromMaybe [] (getBeatmaps getBeatmapsResponse))
+                         $ configureBeatmapRequest auth "2932984"
+    putStrLn "Beatmap"
+    print $ head (fromMaybe [] (getBeatmaps getBeatmapResponse))
