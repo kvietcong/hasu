@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Score
+module APIv1.Score
     ( Score(..)
     , scoresRequest
     , recentPlaysRequest
@@ -7,7 +7,7 @@ module Score
     , getScores
     ) where
 
-import HasuBase
+import APIv1.HasuBase
 import Data.Aeson
 import Data.Aeson.Types
 import Control.Applicative

@@ -4,11 +4,11 @@ version:            0.1.0.0
 synopsis:           A Haskell library for osu!
 
 -- A longer description of the package.
--- description:
-homepage:
+description: A Haskell library for osu!
+homepage: https://github.com/kvietcong/hasu
 
 -- A URL where users can report bugs.
--- bug-reports:
+bug-reports:        https://github.com/kvietcong/hasu/issues
 license:            NONE
 author:             KV Le
 maintainer:         32186663+kvietcong@users.noreply.github.com
@@ -22,7 +22,7 @@ extra-source-files:
 
 executable hasu
     main-is:            Main.hs
-    other-modules:      User, Score, Beatmap, HasuBase
+    other-modules:      APIv1.User, APIv1.Score, APIv1.Beatmap, APIv1.HasuBase
     ghc-options:        -Wall
     default-language:   Haskell2010
     hs-source-dirs:     src, src/lib
@@ -35,7 +35,7 @@ executable hasu
                  , utf8-string
 
 library
-    exposed-modules: User, Score, Beatmap, HasuBase
+    exposed-modules: APIv1.User, APIv1.Score, APIv1.Beatmap, APIv1.HasuBase
     build-depends: base
                  , aeson
                  , http-client

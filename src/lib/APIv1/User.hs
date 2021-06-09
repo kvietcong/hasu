@@ -1,12 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
-module User
+module APIv1.User
     ( Event(..)
     , User(..)
     , userRequest
     , getUsers
     ) where
 
-import HasuBase
+import APIv1.HasuBase
 import Data.Aeson
 import Network.HTTP.Simple
 import qualified Data.ByteString.Lazy as LB

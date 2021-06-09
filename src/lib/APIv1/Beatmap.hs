@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Beatmap
+module APIv1.Beatmap
     (Beatmap(..)
     , getBeatmaps
     , getBeatmap
@@ -7,7 +7,7 @@ module Beatmap
     )
 where
 
-import HasuBase
+import APIv1.HasuBase
 import Data.Aeson
 import Data.Aeson.Types
 import Control.Applicative

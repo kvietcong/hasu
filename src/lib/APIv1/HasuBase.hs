@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module HasuBase
+module APIv1.HasuBase
     ( Authentication(..)
     , osuDomain
     , getAuthentication

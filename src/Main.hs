@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
-import Score
-import Beatmap
-import HasuBase
+import APIv1.Score
+import APIv1.Beatmap
+import APIv1.HasuBase
 
 import Data.Maybe (fromMaybe)
 import Network.HTTP.Simple (httpLBS)
