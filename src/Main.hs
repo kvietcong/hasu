@@ -15,13 +15,15 @@ main = do
 
     recentPlaysResponse <- httpLBS
                          $ recentPlaysRequest
-                         $ configureRecentPlaysRequest auth "7358268" "0" "5" "id"
+                         $ configureRequest auth [ ("u", "7358268")
+                                                 , ("limit", "5")
+                                                 , ("type", "id") ]
     putStrLn "Recent Plays"
     mapM_ print (fromMaybe [] (getScores recentPlaysResponse))
     putStrLn ""
 
     getBeatmapResponse <- httpLBS
                          $ getBeatmapsRequest
-                         $ configureBeatmapRequest auth "2932984"
+                         $ configureRequest auth [("b", "2932984")]
     putStrLn "Beatmap"
     print $ head (fromMaybe [] (getBeatmaps getBeatmapResponse))

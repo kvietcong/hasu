@@ -3,7 +3,6 @@ module User
     ( Event(..)
     , User(..)
     , userRequest
-    , configureUserRequest
     , getUsers
     ) where
 
@@ -11,7 +10,6 @@ import HasuBase
 import Data.Aeson
 import Network.HTTP.Simple
 import qualified Data.ByteString.Lazy as LB
-import qualified Data.ByteString.UTF8 as BU
 
 data Event = Event
     { displayHTML       :: String
@@ -87,13 +85,3 @@ userRequest options = setRequestBodyLBS "SOMEBODY ONCE TOLD ME"
                       $ setRequestPath "/api/get_user"
                       $ setRequestQueryString options
                       osuDomain
-
-configureUserRequest :: Authentication ->
-    BU.ByteString -> BU.ByteString -> BU.ByteString -> BU.ByteString -> Query
-configureUserRequest (Authentication query) u m type' event_days =
-    [ ("u", Just u)
-    , ("m", Just m)
-    , ("type", Just type')
-    , ("event_days", Just event_days) ] ++ query
-
-

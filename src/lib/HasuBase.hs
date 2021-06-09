@@ -4,6 +4,7 @@ module HasuBase
     , osuDomain
     , getAuthentication
     , getAuthenticationQuery
+    , configureRequest
     ) where
 
 import Network.HTTP.Simple
@@ -19,3 +20,7 @@ getAuthentication apiKey = Authentication [("k", Just apiKey)]
 
 getAuthenticationQuery :: Authentication -> Query
 getAuthenticationQuery (Authentication q) = q
+
+configureRequest :: Authentication -> [(BU.ByteString, BU.ByteString)] -> Query
+configureRequest (Authentication query) options =
+    [(option, Just value) | (option, value) <- options] ++ query

@@ -4,8 +4,6 @@ module Beatmap
     , getBeatmaps
     , getBeatmap
     , getBeatmapsRequest
-    , configureBeatmapRequest
-    , configureBeatmapsRequest
     )
 where
 
@@ -15,7 +13,6 @@ import Data.Aeson.Types
 import Control.Applicative
 import Network.HTTP.Simple
 import qualified Data.ByteString.Lazy as LB
-import qualified Data.ByteString.UTF8 as BU
 
 data Beatmap = Beatmap
     { approved          :: Int
@@ -115,24 +112,3 @@ getBeatmapsRequest options = setRequestBodyLBS "SOMEBODY ONCE TOLD ME"
                       $ setRequestPath "/api/get_beatmaps"
                       $ setRequestQueryString options
                       osuDomain
-
--- TODO: Fix how this is done
-configureBeatmapsRequest :: Authentication ->
-    BU.ByteString -> BU.ByteString -> BU.ByteString -> BU.ByteString ->
-    BU.ByteString -> BU.ByteString -> BU.ByteString -> BU.ByteString ->
-    BU.ByteString -> BU.ByteString -> Query
-configureBeatmapsRequest (Authentication query) since s b u type' m a h limit mods =
-    [ ("since", Just since)
-    , ("s", Just s)
-    , ("b", Just b)
-    , ("u", Just u)
-    , ("type", Just type')
-    , ("m", Just m)
-    , ("a", Just a)
-    , ("h", Just h)
-    , ("limit", Just limit)
-    , ("mods", Just mods) ] ++ query
-
-configureBeatmapRequest :: Authentication -> BU.ByteString -> Query
-configureBeatmapRequest (Authentication query) b = ("b", Just b) : query
-

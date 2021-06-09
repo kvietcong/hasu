@@ -2,11 +2,8 @@
 module Score
     ( Score(..)
     , scoresRequest
-    , configureScoresRequest
     , recentPlaysRequest
-    , configureRecentPlaysRequest
     , userBestRequest
-    , configureUserBestRequest
     , getScores
     ) where
 
@@ -16,7 +13,6 @@ import Data.Aeson.Types
 import Control.Applicative
 import Network.HTTP.Simple
 import qualified Data.ByteString.Lazy as LB
-import qualified Data.ByteString.UTF8 as BU
 
 data Score = Score
     { userID           :: Maybe Int
@@ -76,41 +72,14 @@ scoresRequest options = setRequestBodyLBS "SOMEBODY ONCE TOLD ME"
                       $ setRequestQueryString options
                       osuDomain
 
-configureScoresRequest :: Authentication ->
-    BU.ByteString -> BU.ByteString -> BU.ByteString -> BU.ByteString ->
-    BU.ByteString -> BU.ByteString -> Query
-configureScoresRequest (Authentication query) b u m mods type' limit =
-    [ ("b", Just b)
-    , ("u", Just u)
-    , ("m", Just m)
-    , ("mods", Just mods)
-    , ("type", Just type')
-    , ("limit", Just limit) ] ++ query
-
 recentPlaysRequest :: Query -> Request
 recentPlaysRequest options = setRequestBodyLBS "SOMEBODY ONCE TOLD ME"
                            $ setRequestPath "/api/get_user_recent"
                            $ setRequestQueryString options
                            osuDomain
 
-configureRecentPlaysRequest :: Authentication ->
-    BU.ByteString -> BU.ByteString -> BU.ByteString -> BU.ByteString -> Query
-configureRecentPlaysRequest
-    (Authentication query) u m limit type' = [ ("u", Just u)
-                                             , ("m", Just m)
-                                             , ("limit", Just limit)
-                                             , ("type", Just type') ] ++ query
-
 userBestRequest :: Query -> Request
 userBestRequest options = setRequestBodyLBS "SOMEBODY ONCE TOLD ME"
                       $ setRequestPath "/api/get_user_best"
                       $ setRequestQueryString options
                       osuDomain
-
-configureUserBestRequest :: Authentication ->
-    BU.ByteString -> BU.ByteString -> BU.ByteString -> BU.ByteString -> Query
-configureUserBestRequest (Authentication query) u m limit type' =
-    [ ("u", Just u)
-    , ("m", Just m)
-    , ("type", Just type')
-    , ("limit", Just limit) ] ++ query
